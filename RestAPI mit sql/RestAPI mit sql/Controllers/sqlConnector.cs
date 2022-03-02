@@ -1,13 +1,18 @@
-﻿using System.Data;
+﻿using RestAPI_mit_sql.Models;
+using System.Data;
 using System.Data.SqlClient;
 
 
 namespace RestAPI_mit_sql.Controllers
-{ 
-public class SqlConnector
+{
+    public class SqlConnector
     {
-        public void ReadCarData()
+
+       
+            
+        public List<TableMusikDB> ReadData(object dataRecord)
         {
+            
             string connectionString = "Data Source=BIMBO\\SQLEXPRESS;Initial Catalog=MusikDB;Integrated Security=SSPI";
             string queryString = "SELECT PersonID, Nachname FROM dbo.Person;";
 
@@ -21,7 +26,9 @@ public class SqlConnector
                 // Call Read before accessing data.
                 while (reader.Read())
                 {
-                    ReadSingleRow((IDataRecord)reader);
+                    List<TableMusikDB> t = new List<TableMusikDB>();
+                    t.Add(new TableMusikDB() { Nachname = (string)dataRecord[1], PersonID = (int)dataRecord[0] });
+                    return;
                 }
 
                 // Call Close when done reading.
@@ -39,9 +46,13 @@ public class SqlConnector
             throw new NotImplementedException();
         }
 
-        private static void ReadSingleRow(IDataRecord dataRecord)
+        private static async Task ReadSingleRow(IDataRecord dataRecord)
         {
             Console.WriteLine(String.Format("{0}, {1}", dataRecord[0], dataRecord[1]));
+
+
         }
+
+        
     }
 }
